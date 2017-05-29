@@ -36,19 +36,19 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 	}
 
 	// Stores the elements in the args argument to the right key
-	err := stub.PutState("id", []byte(args[0]))
-	if err != nil {
-		return nil, err
+	errId := stub.PutState("id", []byte(args[0]))
+	if errId != nil {
+		return nil, errId
 	}
 
-	err := stub.PutState("name", []byte(args[1]))
-	if err != nil {
-		return nil, err
+	errName := stub.PutState("name", []byte(args[1]))
+	if errName != nil {
+		return nil, errName
 	}
 
-	err := stub.PutState("certification", []byte(args[2]))
-	if err != nil {
-		return nil, err
+	errCert := stub.PutState("certification", []byte(args[2]))
+	if errCert != nil {
+		return nil, errCert
 	}
 
 	return nil, nil
