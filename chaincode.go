@@ -1,19 +1,3 @@
-/*
-Copyright IBM Corp 2016 All Rights Reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-		 http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 package main
 
 import (
@@ -47,12 +31,22 @@ func main() {
  * 	--> Used to do any initialization your chaincode need 
  */
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-	if len(args) != 1 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 1")
+	if len(args) != 3 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 3")
 	}
 
-	// Stores the first element in the args argument to the key "hello_world"
-	err := stub.PutState("hello_world", []byte(args[0]))
+	// Stores the elements in the args argument to the right key
+	err := stub.PutState("id", []byte(args[0]))
+	if err != nil {
+		return nil, err
+	}
+
+	err := stub.PutState("name", []byte(args[1]))
+	if err != nil {
+		return nil, err
+	}
+
+	err := stub.PutState("certification", []byte(args[2]))
 	if err != nil {
 		return nil, err
 	}
@@ -126,7 +120,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 // #### Read function
 /*
  *	Read is called by the Query function.
- *	--> Reads the value of a previously awritten key
+ *	--> Reads the value of a previously written key
  */
 func (t *SimpleChaincode) read(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var key, jsonResp string
